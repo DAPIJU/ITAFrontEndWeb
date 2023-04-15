@@ -110,7 +110,7 @@ function Login() {
 
           <Form.Group className='mb-3'>
             <Form.Text style={theme.fHText}>
-              ¿Has olvidado tu contraseña 12345?
+              ¿Has olvidado tu contraseña?
             </Form.Text>
           </Form.Group>
 
