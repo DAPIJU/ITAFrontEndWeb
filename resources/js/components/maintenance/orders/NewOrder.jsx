@@ -83,7 +83,6 @@ const theme = {
     color: 'white',
     fontSize: '20px',
     backgroundColor: '#1B396A',
-    borderRadius: 15
   },modalBg:{
     backgroundColor: '#807E82',
     fontFamily: 'Montserrat',
@@ -138,7 +137,7 @@ function NewOrder(){
             </Form.Group>
           </Row>
           <Row className="m-2">
-            <Form.Group as={Col} controlId="validationCustom01">
+            <Form.Group as={Col} controlId="validationCustom02">
               <Form.Control
                 required
                 type="text"
@@ -149,7 +148,7 @@ function NewOrder(){
             </Form.Group>
           </Row>
           <Row className="m-2">
-            <Form.Group as={Col} controlId="validationCustom01">
+            <Form.Group as={Col} controlId="validationCustom02">
               <Form.Control
                 required
                 type="text"
