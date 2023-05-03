@@ -70,6 +70,10 @@ const theme = {
     fontSize: '20px',
     color: 'white',
     textAlign: "center",
+  },input:{
+    color: 'white',
+    fontSize: '20px',
+    backgroundColor: '#1B396A',
   }
 };
 
@@ -280,14 +284,12 @@ function Register() {
           </Form.Group>
         </Row>
         <Row className="m-2">
-          <Form.Group as={Col} controlId="validationCustom01">
-            <Form.Control
-              required
-              type="text"
-              placeholder="Firma"
-              style={theme.fControl2}
-            />
-          </Form.Group>
+        <Stack>
+            <h1 style={theme.fHText}>Firma</h1>
+          </Stack>
+          <Stack direction="horizontal"gap={2} className="col-md-6 mx-auto">
+            <input id='fileUpload' type='file' style={theme.input} multiple accept='application/pdf, image/png' responsive/>
+          </Stack>
         </Row>
         <Stack direction="horizontal"gap={2} className="col-md-9 mx-auto">
         <div/>

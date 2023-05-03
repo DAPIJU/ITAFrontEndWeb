@@ -176,11 +176,11 @@ function NewOrder(){
           <div/>
             <Button style={theme.button} onClick={handleShow}>Enviar</Button>
             <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
+            <Modal.Header closeButton style={theme.modalBg}>
               <Modal.Title>Confirmar envio de información</Modal.Title>
             </Modal.Header>
-            <Modal.Body>¿Estas seguro de enviar la informacion?</Modal.Body>
-            <Modal.Footer>
+            <Modal.Body style={theme.modalBg}>¿Estas seguro de enviar la informacion?</Modal.Body>
+            <Modal.Footer style={theme.modalBg}>
             <Stack direction="horizontal"gap={2} className="col-md-5 mx-auto">
             <Button style={theme.button} onClick={handleShow2}>
               Enviar
