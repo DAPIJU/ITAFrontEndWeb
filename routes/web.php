@@ -1,7 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\PersonalDataController;
+use App\Http\Controllers\MaintenanceRequestPDF;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,25 +18,22 @@ use App\Http\Controllers\StudentController;
 |
 */
 
-/*Route::get('/', function () {
+Route::get('/', function () {
     return view('welcome');
-});*/
+});
 
-Route::view('{path?}', 'welcome')
-    ->where('path', '.*');
+Route::get('/showToken',[PersonalDataController::class,'showToken']);
 
-Route::post('RutaStudentIndex', [StudentController::class, 'index']);
-
-Route::get('get_token', [StudentController::class, 'get_token']);
-
-Route::get('Store', [StudentController::class, 'store']);
-
-Route::post('StorePost', [StudentController::class, 'store']);
-
-Route::get('Index', [StudentController::class, 'index']);
-
-Route::post('StudentDestroy', [StudentController::class, 'destroy']);
-
-Route::post('StudentUpdate', [StudentController::class, 'update']);
-
-
+Route:: get('/users',[userController::class, 'index']);
+Route:: get('/users',[userController::class, 'store']);
+Route:: post('/student',[StudentController::class, 'store']);
+Route:: get('/show_Token',[StudentController::class, 'showToken']);
+Route:: post('/show_students_by_program',[ProgramController::class, 'show_students_by_program']);
+Route::post('/student_destroy',[StudentController::class, 'destroy']);
+Route::post('/student_Update',[StudentController::class, 'update']);
+/*generate maintenanceRequestPDF
+Route::get('/maintenancerequestpdf', [MaintenanceRequestPDF::class, 'maintenanceRequestPDF']);
+Route::get('/download-pdf/{filename}', [MaintenanceRequestPDF::class, 'downloadPDF'])->name('download-pdf');
+//generate workOrderPDF
+Route::get('/workorderpdf', [WorkOrderPDF::class, 'workOrderPDF']);
+Route::get('/download-pdf/{filename}', [WorkOrderPDF::class, 'downloadPDF'])->name('download-pdf');*/

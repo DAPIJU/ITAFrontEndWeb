@@ -16,9 +16,13 @@ class RegisterController extends ResponseController
         $validator = Validator::make ($request->all(), [
 
             'name' => 'required',
+            'lastName'=>'required',
+            'area' => 'required',
+            'plantel' => 'required',
             'email'=> 'required|email',
+            'c_email' => 'required|same:email',
             'password' => 'required',
-            'c_password' => 'required|same:password',
+            'c_pass' => 'required|same:password'
 
         ]);
 
@@ -33,7 +37,12 @@ class RegisterController extends ResponseController
             $input ['password'] = bcrypt ($input ['password']);
             $user = User::create ($input);
             $success['token'] = $user->createToken ('MyApp')->accessToken;
-            $success['name'] = $user->name; 
+            $success['id'] = $user->id; 
+            $success['name'] = $user->name;
+            $success['lastName'] = $user->lastName; 
+            $success['area'] = $user->area; 
+            $success['plantel'] = $user->plantel; 
+            $success['email'] = $user->email; 
 
             return $this->sendResponse ($success,'User register successfully.');
 

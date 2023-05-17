@@ -10,6 +10,8 @@ import Container from 'react-bootstrap/Container';
 import Stack from 'react-bootstrap/Stack';
 import axios from 'axios';
 import { auto, left } from '@popperjs/core';
+import { MDBContainer } from 'mdb-react-ui-kit';
+import { useEffect } from 'react';
 
 const theme = {
   bg: {
@@ -61,9 +63,9 @@ const theme = {
     color: '#EE7044',
     fontSize: '20px',
     backgroundColor: 'white',
-    borderColor:"white",
+    borderColor: "white",
     borderRadius: 15
-  },input:{
+  }, input: {
     color: 'white',
     fontSize: '20px',
     backgroundColor: '#1B396A',
@@ -74,210 +76,146 @@ const card = {
   backgroundColor: "yellow"
 };
 
-function EditProfile() {
-  const [validated, setValidated] = useState(false);
+const EditProfile = () => {
+  const [personalData, setPersonalData] = useState({
+    name: '',
+    lastname: '',
+    area: '',
+    signature: '',
+    plantel: ''
+  });
+
+  const [user, setUser] = useState({
+    email: '',
+    password: '',
+    personaldata_id: '',
+    role: ''
+  });
 
   const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+    event.preventDefault();
 
-    setValidated(true);
-  };
-
-  const [input, setInput] = useState({
-    username: '',
-    password: '',
-    confirmPassword: '',
-    email:'',
-    confirmEmail:''
+    const requestData = {
+      personalData,
+      user
+    };
+    axios.put(`http://localhost/ITAFrontEndWeb/public/api/personaldata_update/`, requestData)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
     
-  });
- 
-  const [error, setError] = useState({
-    username: '',
-    password: '',
-    confirmPassword: '',
-    email:'',
-    confirmEmail:''
-  })
- 
-  const onInputChange = e => {
-    const { name, value } = e.target;
-    setInput(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    validateInput(e);
-  }
- 
-  const validateInput = e => {
-    let { name, value } = e.target;
-    setError(prev => {
-      const stateObj = { ...prev, [name]: "" };
- 
-      switch (name) {
-        case "username":
-          if (!value) {
-            stateObj[name] = "Please enter Username.";
-          }
-          break;
- 
-        case "password":
-          if (!value) {
-            stateObj[name] = "Porfavor ingrese la contraseña.";
-          } else if (input.confirmPassword && value !== input.confirmPassword) {
-            stateObj["confirmPassword"] = "Error, Las contraseñas no coinciden.";
-          } else {
-            stateObj["confirmPassword"] = input.confirmPassword ? "" : error.confirmPassword;
-          }
-          break;
- 
-        case "confirmPassword":
-          if (!value) {
-            stateObj[name] = "Por favor confirme la contraseña.";
-          } else if (input.password && value !== input.password) {
-            stateObj[name] = "Error, Las contraseñas no coinciden.";
-          }
-          break;
-
-          case "email":
-          if (!value) {
-            stateObj[name] = "Porfavor ingrese el correo.";
-          } else if (input.confirmEmail && value !== input.confirmEmail) {
-            stateObj["confirmEmail"] = "Error, Los correos no coinciden.";
-          } else {
-            stateObj["confirmEmail"] = input.confirmEmail ? "" : error.confirmEmail;
-          }
-          break;
- 
-        case "confirmEmail":
-          if (!value) {
-            stateObj[name] = "Porfavor ingrese el correo.";
-          } else if (input.email && value !== input.email) {
-            stateObj[name] = "Error, Los correos no coinciden.";
-          }
-          break;
- 
-        default:
-          break;
-      }
- 
-      return stateObj;
-    });
-  }
+  };
 
   return (
     <>
-    <Menu/>
-    <section>
-    <Container fluid style={{ padding: 40, position: 'sticky', alignItems: 'center' }}>
-      <Stack  align="center" className="col-md-6 mx-auto" style={{ borderColor: "#1B396A", borderWidth: 3 }}>
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <Row className="mb-3">
-          <h1 style={theme.header}>Editar Usuario</h1>
-        </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="6" controlId="validationCustom01">
-            <h1 style={theme.fHText}>Nombre</h1>
-            <Form.Control
-              required
-              type="text"
-              style={theme.fControl}
-            />
-          </Form.Group>
-          <Form.Group as={Col} md="6" controlId="validationCustom02">
-          <h1 style={theme.fHText}>Apellidos</h1>
-            <Form.Control
-              required
-              type="text"
-              style={theme.fControl}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="6" controlId="validationCustom01">
-          <h1 style={theme.fHText}>Area</h1>
-            <Form.Control
-              required
-              type="text"
-              style={theme.fControl}
-            />
-          </Form.Group>
-          <Form.Group as={Col} md="6" controlId="validationCustom02">
-          <h1 style={theme.fHText}>Plantel</h1>
-            <Form.Control
-              required
-              type="text"
-              style={theme.fControl}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="6" controlId="validationCustom01">
-          <h1 style={theme.fHText}>Correo</h1>
-            <Form.Control
-              required
-              type="email"
-              name="email"
-              onBlur={validateInput}
-              onChange={onInputChange}
-              style={theme.fControl}
-            />
-            {error.email && <span className='err'>{error.email}</span>}
-          </Form.Group>
-          <Form.Group as={Col} md="6" controlId="validationCustom02">
-          <h1 style={theme.fHText}>Rol</h1>
-            <Form.Control
-              required
-              type="text"
-              style={theme.fControl}
-            />
-          </Form.Group>
-        </Row>
-        <Row className="m-2">
-        <Stack>
-            <h1 style={theme.fHText}>Subir Evidencia</h1>
+      <Menu />
+      <section>
+        <Container fluid style={{ padding: 40, position: 'sticky', alignItems: 'center' }} breakpoint="xxl">
+          <Stack fluid align="center" className="col-md-6 mx-auto" style={{ borderColor: "#1B396A", borderWidth: 3 }}>
+            <Form onSubmit={handleSubmit}>
+              <Row className="mb-3">
+                <h1 style={theme.header}>Editar Usuario</h1>
+              </Row>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="6" fluid>
+                  <h1 style={theme.fHText}>Nombre</h1>
+                  <Form.Control
+                    type="text"
+                    className="form-control"
+                    id="name"
+                    value={personalData.name}
+                    onChange={(e) => setPersonalData({ ...personalData, name: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6" >
+                  <h1 style={theme.fHText}>Apellidos</h1>
+                  <Form.Control
+                    type="text"
+                    className="form-control"
+                    id="lastname"
+                    value={personalData.lastname}
+                    onChange={(e) => setPersonalData({ ...personalData, lastname: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+              </Row>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="6">
+                  <h1 style={theme.fHText}>Area</h1>
+                  <Form.Control
+                    type="text"
+                    className="form-control"
+                    id="area"
+                    value={personalData.area}
+                    onChange={(e) => setPersonalData({ ...personalData, area: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <h1 style={theme.fHText}>Plantel</h1>
+                  <Form.Control
+                    type="text"
+                    className="form-control"
+                    id="plantel"
+                    value={personalData.plantel}
+                    onChange={(e) => setPersonalData({ ...personalData, plantel: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+              </Row>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="6">
+                  <h1 style={theme.fHText}>Correo</h1>
+                  <Form.Control
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    value={user.email}
+                    onChange={(e) => setUser({ ...user, email: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group as={Col} md="6" >
+                  <h1 style={theme.fHText}>Rol</h1>
+                  <Form.Control
+                    type="text"
+                    className="form-control"
+                    id="role"
+                    value={user.role}
+                    placeholder={user.role}
+                    onChange={(e) => setUser({ ...user, role: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+              </Row>
+              <Row className="m-2">
+                <Stack>
+                  <h1 style={theme.fHText}>Actualizar Firma</h1>
+                </Stack>
+                <Stack direction="horizontal" gap={2} className="col-md-6 mx-auto">
+                  <input id='fileUpload' type='file' style={theme.input} multiple accept='image/png' onChange={(e)=> setSignature(e.target.files[0])}/>
+                </Stack>
+              </Row>
+              <Row>
+                <Stack direction="horizontal" gap={5} className="d-flex justify-content-center">
+
+                  <Button type="submit" style={theme.button}>Guardar</Button>
+
+                  <Button type="submit" align="right" style={theme.button2}>Cancelar</Button>
+
+                </Stack>
+              </Row>
+            </Form>
+            <br />
           </Stack>
-          <Stack direction="horizontal"gap={2} className="col-md-6 mx-auto">
-            <input id='fileUpload' type='file' style={theme.input} multiple accept='application/pdf, image/png' responsive/>
-          </Stack>
-        </Row>
-        <Stack direction="horizontal"gap={2} className="col-md-9 mx-auto">
-        <div/>
-        <div/>
-        <div/>
-        <div/>
-        <div/>
-        <div/>
-          <Button type="submit" style={theme.button}>Guardar</Button>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <div/>
-          <Button type="submit" align="right" style={theme.button2}>Cancelar</Button>
-          
-          </Stack>
-      </Form>
-      <br/>
-      </Stack>
-      
-      </Container>
-    </section>
-    <Footer/>
+
+        </Container>
+      </section>
+      <Footer />
     </>
   );
 }

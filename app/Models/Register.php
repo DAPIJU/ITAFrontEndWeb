@@ -5,21 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Student extends Model
+class Register extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'name',
-        'last_name',
-        'control',
+        'lastname',
+        'area',
+        'plantel',
         'email',
-        'program_id'
+        'password'
     ];
 
     public function program()
     {
         return $this->belongsTo(program::class);
     }
-
 }
