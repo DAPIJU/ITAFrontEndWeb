@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Button } from 'react-bootstrap';
 
 function Example() {
     return (
@@ -8,7 +9,7 @@ function Example() {
                 <div className="col-md-8">
                     <div className="card">
                         <div className="card-header">Example Component</div>
-
+                            <Button variant="primary">Primary</Button>{' '}
                         <div className="card-body">I'm an example component!</div>
                     </div>
                 </div>
@@ -18,13 +19,3 @@ function Example() {
 }
 
 export default Example;
-
-if (document.getElementById('example')) {
-    const Index = ReactDOM.createRoot(document.getElementById("example"));
-
-    Index.render(
-        <React.StrictMode>
-            <Example/>
-        </React.StrictMode>
-    )
-}

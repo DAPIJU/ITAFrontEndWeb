@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\WorkOrder;
 use Illuminate\Support\Facades\Validator; //Import the validator class
+use Illuminate\Support\Facades\DB;
 
 
 class WorkOrderController extends Controller
@@ -217,4 +218,91 @@ class WorkOrderController extends Controller
         $workorder = WorkOrder::find($id);
         $workorder->delete();
     }
+    public function showApproved()
+    {
+        $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+        ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
+        ->where('workorders.approved', '1')
+        ->get([
+            'workorders.id', 
+            'maintenancerequests.requestDate', 
+            'personaldatas.area', 
+            'personaldatas.name', 
+            'maintenancerequests.requestDescription',
+            'workorders.releasedDate',
+            'workorders.maintenanceDate',
+            'workorders.dateApproved',
+            'workorders.employeeName', 
+            'workorders.evidence1', 
+            'workorders.evidence2', 
+            'workorders.evidence3', 
+            'maintenancerequests.status'
+        ]);
+        return $workorder;
+    }
+
+    public function showRequestHistory()
+    {
+        $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+        ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
+        ->where('maintenancerequests.status', 'Liberado')
+        ->get([
+            'maintenancerequests.id', 
+            'maintenancerequests.requestDate', 
+            'personaldatas.name', 
+            'maintenancerequests.department', 
+            'maintenancerequests.requestDescription', 
+            'workorders.releasedDate',
+            'workorders.dateApproved',
+            'workorders.employeeName',
+            'workorders.evidence1', 
+            'workorders.evidence2', 
+            'workorders.evidence3', 
+            'maintenancerequests.status'
+            ]);
+        return $workorder;
+    }
+    //funcion para actualizar el estado a aprobado
+    public function updateStatus(Request $request, $id)
+    {
+        $workorder = WorkOrder::findOrFail($id);
+        $workorder->approved = $request->input('approved');
+        $workorder->save();
+
+        if ($workorder->approved == 1) {
+            DB::table('maintenancerequest')
+                ->where('id', $workorder->maintenancerequest_id)
+                ->update(['status' => 'Aprobado']);
+        }
+
+        return response()->json($workorder);
+    }
+
+    public function showRelease()
+    {
+        
+    $workorder = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+    ->where('maintenancerequests.status', '=', 'Liberada')
+    ->where('workorders.released', '=', '0')
+    ->update(['released' => 1]);    
+
+    $workorders = WorkOrder::join('maintenancerequests', 'maintenancerequests.id', '=', 'workorders.maintenancerequest_id')
+    ->join('personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id')
+    ->where('released', '=', '1')
+    ->get([
+        'workorders.id',
+        'maintenancerequests.requestDate',
+        'personaldatas.area',
+        'personaldatas.name',
+        'maintenancerequests.requestDescription',
+        'workorders.releasedDate',
+        'workorders.maintenanceDate',
+        'workorders.dateApproved',
+        'workorders.employeeName',
+        'workorders.evidence1',
+        'workorders.evidence2',
+        'workorders.evidence3', 
+        'maintenancerequests.status'
+    ]);
+}
 }

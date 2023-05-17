@@ -267,7 +267,7 @@ function NewOrder() {
               <Button className="btn btn-danger">Cancelar</Button>
               </Col>
               <Col>
-                <Button type='submit' onSubmit={handleSubmit}>Aceptar</Button>
+                <Button>Aceptar</Button>
               </Col>
             </Form.Group>
 

@@ -1,83 +1,55 @@
-import { Nav } from 'react-bootstrap';
+import IconMaintenanceRequestsUser from '/src/IconsHome/IconMaintenanceRequestsUser.png';
+import IconOrdersUser from '/src/IconsHome/IconOrdersUser.png';
+import IconNewUser from '/src/IconsHome/IconNewUser.png';
+import CreateNewOrder from '/src/IconsOrders/CreateNewOrder.png'
+
 import Container from 'react-bootstrap/Container';
-import Menu from './Menu';
 import Stack from 'react-bootstrap/Stack';
-import IconMaintenanceRequestsUser from '/src/IconsOrders/IconMaintenanceRequestsUser.png';
-import IconOrdersUser from '/src/IconsOrders/IconOrdersUser.png';
-import IconProfileUse from '/src/IconsOrders/IconProfileUser.png';
+import Nav from 'react-bootstrap/Nav';
+import Footer from './Footer';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
-const theme = {
-  nav:{
-    backgroundColor:"#1B396A"
-  },
-  bg: {
-    backgroundColor: 'white',
-  },
-  logo: {
-    alignContent: "center",
-    width: 70,
-    height: 70
-  },
-  navImg:{
-    alignContent: "center",
-    weith: 40,
-    height: 40
-  },
-  header: {
-    color: 'black',
-    fontSize: '96px',
-    fontFamily: 'Montserrat'
-  },
-  fControl: {
-    backgroundColor: "#ECECEC",
-    borderColor: "black",
-    fontFamily: 'Montserrat',
-    fontSize: '20px',
-    width: '17%',
-    borderRadius: 50
-  },
-  fHText: {
-    color: 'white',
-    fontFamily: 'Montserrat',
-    fontSize: '20px'
-  },
-  fDText: {
-    color: 'white',
-    fontFamily: 'Montserrat',
-    fontSize: '30px'
-  },
-  button: {
-    color: 'black',
-    fontSize: '20px',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 30
-  },
-  optionIcons: {
-    align: "center",
-    width: 450,
-    height: 150
-  }
-};
+function Home() {
 
-const card = {
-  backgroundColor: "blue"
-};
-  
-function M_Maintenance(){
     return (
-      <>
-      <Menu/>
-      <section>
-        <br/>
-        <Container>
-          <Stack align="center" gap={3}> 
-            <div><img className='mb-3' src={IconMaintenanceRequestsUser} style={theme.optionIcons} /></div>
-            <div><img className='mb-3' src={IconOrdersUser} style={theme.optionIcons}/></div>
-            <div><img className='mb-3' src={IconProfileUse} style={theme.optionIcons}/></div>
-          </Stack>
-        </Container>
-      </section>
-      </>
+        <>
+            <Container fluid style={{ position: 'sticky', paddingTop: 25 }} className="d-flex align-items-center">
+                <Stack align="center" className="mx-auto">
+                    <Nav className="flex-column">
+                        <Nav.Item>
+                            <Stack align="center" style={{ padding: "3%" }} className="mx-auto justify-content-center align-items-center">
+                                <Row>
+                                    <Col sm>
+                                        <Nav.Link href='earring'>
+                                            <img className='col-mb-3 mx-auto' src={IconOrdersUser} width={380} height={100} />
+                                        </Nav.Link>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col sm>
+                                        <Nav.Link href='activeRequest'>
+                                            <img className='col-mb-3 mx-auto' src={IconMaintenanceRequestsUser} width={380} height={100} />
+                                        </Nav.Link>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col sm>
+                                        <Nav.Link href='register'>
+                                            <img className='col-mb-3 mx-auto' src={IconNewUser} width={380} height={100} />
+                                        </Nav.Link>
+                                    </Col>
+                                </Row>
+                            </Stack>
+                        </Nav.Item>
+                    </Nav>
+                </Stack>
+            </Container>
+
+
+        </>
     );
+
 }
-export default M_Maintenance;
+
+export default Home;
