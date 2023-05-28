@@ -84,13 +84,15 @@ function Login() {
       }
     ).then(response => {
 
-      localStorage.setItem("user-info", response.data.access_token)
+      localStorage.setItem("user-info", response.data[0])
+      localStorage.setItem('user-id', response.data[1].id)
 
-      navigate({pathname: "/ITAFrontEndWeb/public/home", state: {token: response.data.access_token}})
+
+      navigate({pathname: "/ITAFrontEndWeb/public/home", state: {token: response.data[0]}})
 
       console.log('response:');
       console.log(response);
-      localStorage('token', JSON.stringify(response.data))
+      
     }).catch(error => {
       console.log(error);
       swal({

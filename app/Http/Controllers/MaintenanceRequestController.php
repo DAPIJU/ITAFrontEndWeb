@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Validator; //Import the validator class
 
 class MaintenanceRequestController extends Controller
 {
+    /*protected $redirectTo='/';
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }*/
     /**
      * Display a listing of the resource.
      *

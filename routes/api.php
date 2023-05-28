@@ -39,8 +39,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::get('/showToken',[PersonalDataController::class,'showToken']);
 Route::post('/login', [UserController::class, 'login']);
-Route::post('/user_register',[UserController::class, 'register']);
-//Route::middleware('auth:api') ->group(function (){
+
+Route::middleware('auth:api') ->group(function (){
 
     Route::post('/personalData_store',[PersonalDataController::class, 'store']);
     Route::post('/personalData_update/{id}',[PersonalDataController::class,'update']);
@@ -55,6 +55,8 @@ Route::post('/user_register',[UserController::class, 'register']);
     Route::post('/user_update/{id}',[UserController::class,'update']);
     Route::delete('/user_destroy/{id}',[UserController::class, 'destroy']);
     Route::get('/user_index',[UserController::class, 'index']);
+    Route::get('/user_authProfile',[UserController::class, 'authProfle']);
+    Route::post('/user_register',[UserController::class, 'register']);
 
     Route::get('/maintenance_index',[MaintenanceRequestController::class, 'index']);
     Route::post('/maintenance_store',[MaintenanceRequestController::class, 'store']);
@@ -72,8 +74,9 @@ Route::post('/user_register',[UserController::class, 'register']);
     Route::get('/workorder_showApproved',[WorkOrderController::class, 'showApproved']);
     Route::get('/workorder_showRequestHistory',[WorkOrderController::class, 'showRequestHistory']);
     Route::get('/workorder_showRelease',[WorkOrderController::class, 'showRelease']);
+    Route::post('/workorder_newOrder',[WorkOrderController::class, 'newOrder']);
 
-//});
+});
 
 
 

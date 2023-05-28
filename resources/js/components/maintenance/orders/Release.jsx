@@ -1,8 +1,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from "axios";
-import { Link } from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 import IconEarringsUser from '/src/IconsOrders/IconEarringsUser.png';
 import IconReleasedUser from '/src/IconsOrders/IconReleasedUser.png';
 import IconApprovedUser from '/src/IconsOrders/IconApprovedUser.png';
@@ -14,18 +14,31 @@ import Table from 'react-bootstrap/Table';
 
 const Release = () => {
 
-    const [releases, setReleases] = useState([]);
+    const [releases, setReleases] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [workOrders, setWorkOrders] = useState([]);
+    const location = useLocation();
+    const [token, useToken] = useState('user-info');
 
     useEffect(() => {
-        getAllReleases();
-    }, [])
+            getAllReleases();
+    },[])
 
     const getAllReleases = async () => {
-        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/workoder_showRelease');
+        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/workorder_showRelease',
+        { //acceder con el token
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Accept': 'application/json',
+              'Authorization':`Bearer ${localStorage.getItem('user-info')}`
+            }
+          });
         setReleases(response.data);
         console.log(response.data);
+    }
+    const deleteReleases = async (id) => {
+        await axios.post(`${ruta}/workorder_destroy/${id}`, {});
+        getAllReleases();
     }
 
     useEffect(() => {
@@ -34,7 +47,7 @@ const Release = () => {
 
       const fetchWorkOrders = async () => {
         try {
-          const response = await axios.get('/api/workorders');
+          const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/workorders');
           setWorkOrders(response.data);
         } catch (error) {
           console.error('Error fetching work orders:', error);
@@ -68,7 +81,7 @@ const Release = () => {
             return release;
         }
     });
-
+   if (releases) {
     return (
         <>
             <Nav>
@@ -135,10 +148,10 @@ const Release = () => {
                             <td> <img src={release.evidence3} alt="signature" width={100} height={100} /> </td>
                             <td> {release.status} </td>
                             <td> <button  onClick={() => handleApproval(workOrder.id)}>
-
+                                Aprobar
                             </button>
                                 <button
-                                    onClick={() => deleteApproveds(release.id)}
+                                    onClick={() => deleteReleases(release.id)}
                                     className="btn btn-danger"
                                 >
                                     Eliminar
@@ -150,6 +163,7 @@ const Release = () => {
             </Table>
         </>
     );
+}
 };
 
 export default Release;

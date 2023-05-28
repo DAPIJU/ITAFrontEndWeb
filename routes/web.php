@@ -35,6 +35,8 @@ Route::post('StudentDestroy', [StudentController::class, 'destroy']);
 
 Route::post('StudentUpdate', [StudentController::class, 'update']);
 
+Route::view('/home','home')->name('home')->middleware('auth');
+
 /*generate maintenanceRequestPDF
 Route::get('/maintenancerequestpdf', [MaintenanceRequestPDF::class, 'maintenanceRequestPDF']);
 Route::get('/download-pdf/{filename}', [MaintenanceRequestPDF::class, 'downloadPDF'])->name('download-pdf');
