@@ -18,19 +18,27 @@ const Earring = () => {
 
     const [searchTerm, setSearchTerm] = useState("");
     const [earrings, setEarrings] = useState([]);
+    const ruta = "http://localhost/ITAFrontEndWeb/public/api";
 
     useEffect(() => {
         getAllEarrings();
     }, [])
 
     const getAllEarrings = async () => {
-        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/maintenance_showEarring');
+        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/workorder_showEarring',
+        {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Accept': 'application/json',
+              'Authorization':`Bearer ${localStorage.getItem('user-info')}`
+            }
+          });
         setEarrings(response.data);
         console.log(response.data);
     }
 
     const deleteEarring = async (id) => {
-        await axios.post(`${ruta}/workorder_destroy/${id}`, {});
+        await axios.delete(`${ruta}/workorder_destroy/${id}`, {});
         getAllEarrings();
     }
 
@@ -41,11 +49,19 @@ const Earring = () => {
             earring.area.toLowerCase().includes(searchTerm.toLowerCase()) ||
             earring.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             earring.requestDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            earring.status.toLowerCase().includes(searchTerm.toLowerCase()) 
+            earring.status.toLowerCase().includes(searchTerm.toLowerCase())
         ) {
             return earring;
         }
     });
+
+    //const for the table
+    const handleClick = (id) => {
+        const confirmar = window.confirm(`¿Deseas crear una orden de solicitud con el ID: ${id}?`);
+    if (confirmar) {
+      history.push(`http://localhost/ITAFrontEndWeb/public/newOrder/${id}`);
+    }
+      };
 
 
     return (
@@ -101,22 +117,22 @@ const Earring = () => {
                 </thead>
                 <tbody>
                     {filteredActives.map((earring) => (
-                        <tr key={earring.id}>
+                        <tr key={earring.id} onClick={() => handleClick(earring.id)}>
                             <td> {earring.id} </td>
                             <td> {earring.requestDate} </td>
                             <td> {earring.area} </td>
                             <td> {earring.name} </td>
                             <td> {earring.requestDescription} </td>
-                            <td> <img src={earring.evidence1} alt="signature" width={100} height={100}/> </td>
-                            <td> <img src={earring.evidence2} alt="signature" width={100} height={100}/> </td>
-                            <td> <img src={earring.evidence3} alt="signature" width={100} height={100}/> </td>
+                            <td> <img src={earring.evidence1} alt="signature" width={100} height={100} /> </td>
+                            <td> <img src={earring.evidence2} alt="signature" width={100} height={100} /> </td>
+                            <td> <img src={earring.evidence3} alt="signature" width={100} height={100} /> </td>
                             <td> {earring.status} </td>
                             <td>
-                                    <button
-                                        onClick={() => deleteEarring(earring.id)}
-                                        className="btn btn-danger"
-                                    >
-                                        Eliminar
+                                <button
+                                    onClick={() => deleteEarring(earring.id)}
+                                    className="btn btn-danger"
+                                >
+                                    Eliminar
                                 </button>
                             </td>
                         </tr>

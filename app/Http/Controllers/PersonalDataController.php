@@ -256,19 +256,19 @@ class PersonalDataController extends Controller
         $data->name=$request->name;
         $data->lastname=$request->lastname;
         $data->area=$request->area;
-        if($request->hasFile('signature')){
+        if ($request->hasFile('signature')) {
             $file = $request->file('signature');
             $destination = 'signatures/';
-            $fileName = date('YmHis').'-'. $file->getClientOriginalName();
-            $upload = $request->file('signature')->move($destination, $fileName);
-            $data->signature = $destination.$fileName;
-            }
-       
+            $fileName = date('YmHis') . '-' . $file->getClientOriginalName();
+            $path = $file->storeAs($destination, $fileName);
+            $data->signature = $path;
+        }
+        
+        //$data->signature=$request->signature->store('signatures');
         $data->plantel=$request->plantel;
         $data->save();
 
 
-       
         $user = User::create([
             'email' => $request->email,
             'password' => bcrypt($request->password),
@@ -277,8 +277,8 @@ class PersonalDataController extends Controller
         ]);
 
         $token = $user->createToken('LaravelAuthApp')->accessToken;
+
         return response()->json(['token'=>$token],200);
-        
 
     }
 
@@ -337,7 +337,6 @@ class PersonalDataController extends Controller
         $dataU->password=$request->password;
         $dataU->role=$request->role;
         $dataU->save();
-        
 
 
 
@@ -357,12 +356,18 @@ class PersonalDataController extends Controller
 
         $data->plantel=$request->plantel;
         $data->save();
-        
     }
-    public function destroyUserPersonalData($id)
+
+    public function showMaintenancePerson()
     {
-        $data = PersonalData::find($id);
-        $dataU = User::where('personalData_id',$id)->delete();
-        $data->delete();
+
+        $data = PersonalData::join('users', 'users.personaldata_id', '=', 'personaldatas.id')
+        ->where('users.role', 'Mantenimiento')
+        ->get([
+            'personaldatas.name', 
+            'personaldatas.lastname',
+            ]);
+        return $data;
     }
+
 }

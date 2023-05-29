@@ -78,7 +78,7 @@ function EditProfile() {
 
   /*===============================================AXIOS======================================*/
 
-  const HEADERS = {
+  const headers = {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${localStorage.getItem("user-info")}`,
@@ -95,8 +95,23 @@ function EditProfile() {
   const [signature, setSignature] = useState('');
 
   const getData = async () => {
-    const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/user_show/' + 1)//id del usuario en sesion
-    const responseTwo = await axios.get('http://localhost/ITAFrontEndWeb/public/api/personalData_show/' + response.data.personaldata_id)
+    const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/user_show/' + 1,
+    { //acceder con el token
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+        'Authorization':`Bearer ${localStorage.getItem('user-info')}`
+      }
+    })//id del usuario en sesion
+    const responseTwo = await axios.get('http://localhost/ITAFrontEndWeb/public/api/personalData_show/' 
+    + response.data.personaldata_id,
+    { //acceder con el token
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+        'Authorization':`Bearer ${localStorage.getItem('user-info')}`
+      }
+    })
     console.log(response, responseTwo)
     setEmail(response.data.email)
     setPassword(response.data.password)
@@ -132,11 +147,14 @@ function EditProfile() {
 
 
     //hacer update de tabla user
-    axios.post(`http://localhost/ITAFrontEndWeb/public/api/personalData_updateProfile/${id}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data', 'Accept': 'application/json','Authorization':`Bearer ${JSON.parse(localStorage.getItem('token')).token}`
-      }
-    })
+    axios.post(`http://localhost/ITAFrontEndWeb/public/api/personalData_updateProfile/${id}`, formData, 
+    { //acceder con el token
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Accept': 'application/json',
+      'Authorization':`Bearer ${localStorage.getItem('user-info')}`
+    }
+  })
       .catch((error) => {
         console.log(error);
       });

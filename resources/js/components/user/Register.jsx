@@ -112,12 +112,14 @@ function Register() {
     formData.append('role', role)
 
 
-    axios.post('http://localhost/ITAFrontEndWeb/public/api/personalData_registerPersonalUser', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data', 'Accept': 'application/json',
-        'Authorization':`Bearer ${JSON.parse(localStorage.getItem('token')).token}`
-      }
-    })
+    axios.post('http://localhost/ITAFrontEndWeb/public/api/personalData_registerPersonalUser', formData, 
+    { //acceder con el token
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Accept': 'application/json',
+      'Authorization':`Bearer ${localStorage.getItem('user-info')}`
+    }
+  })
       .catch((error) => {
         console.log(error);
       });
@@ -193,7 +195,8 @@ function Register() {
               <Form.Label className='col-2'>Firma</Form.Label>
               <Col>
                 <Stack direction="horizontal" gap={2} >
-                  <input id='fileUpload' type='file' style={theme.input} multiple accept='image/png' onChange={(e) => setSignature(e.target.files[0])} />
+                  <input id='fileUpload' type='file' style={theme.input} multiple accept='image/png'
+                   onChange={(e) => setSignature(e.target.files[0])} />
                 </Stack>
               </Col>
             </Form.Group>

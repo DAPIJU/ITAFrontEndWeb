@@ -24,7 +24,14 @@ const ActiveRequests = () => {
     }, [])
 
     const getAllActives = async () => {
-        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/maintenance_showActiveRequest');
+        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/maintenance_showActiveRequest', 
+        { //acceder con el token
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Accept': 'application/json',
+              'Authorization':`Bearer ${localStorage.getItem('user-info')}`
+            }
+          });
         setActives(response.data);
         console.log(response.data);
     }

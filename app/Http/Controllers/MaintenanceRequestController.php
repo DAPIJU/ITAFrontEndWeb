@@ -175,8 +175,9 @@ class MaintenanceRequestController extends Controller
         $maintenance->delete();
     }
     
+    
 
-    public function showEarring()
+    /*public function showEarring()
     {
         $maintenance = Maintenancerequest::join(
             'personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id'
@@ -194,7 +195,7 @@ class MaintenanceRequestController extends Controller
             'maintenancerequests.status'
     ]);
         return $maintenance;
-    }
+    }*/
 
     public function showActiveRequest()
     {
@@ -216,25 +217,4 @@ class MaintenanceRequestController extends Controller
             ]);
         return $maintenance;
     }
-
-    /*public function showRequestHisory()
-    {
-        $maintenance = Maintenancerequest::join(
-            'personaldatas', 'personaldatas.id', '=', 'maintenancerequests.personaldata_id'
-            )
-        ->where('maintenancerequests.status', 'Liberada')
-        ->get([
-            'maintenancerequests.id', 
-            'maintenancerequests.requestDate', 
-            'personaldatas.name', 
-            'maintenancerequests.department', 
-            'maintenancerequests.requestDescription', 
-            'maintenancerequests.evidence1', 
-            'maintenancerequests.evidence2', 
-            'maintenancerequests.evidence3', 
-            'personaldatas.signature',
-            'maintenancerequests.status'
-            ]);
-        return $maintenance;
-    }*/
 }
