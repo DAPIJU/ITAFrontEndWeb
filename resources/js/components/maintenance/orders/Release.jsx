@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 import IconEarringsUser from '/src/IconsOrders/IconEarringsUser.png';
 import IconReleasedUser from '/src/IconsOrders/IconReleasedUser.png';
@@ -16,39 +17,27 @@ import { Link } from "react-router-dom";
 const Release = () => {
 
     const [releases, setReleases] = useState([]);
-    /*const [searchTerm, setSearchTerm] = useState("");
-    const [workOrders, setWorkOrders] = useState([]);*/
+    const [searchTerm, setSearchTerm] = useState("");
+    const [workOrders, setWorkOrders] = useState([]);
 
     useEffect(() => {
-        getAllReleases();
-    }, [])
+            getAllReleases();
+    },[])
 
     const getAllReleases = async () => {
-        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/workorder_showRelease',
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('user-info')}`
-                }
-            });
+        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/workoder_showRelease');
         setReleases(response.data);
         console.log(response.data);
     }
-    
-    const deleteRelease = async (id) => {
-        await axios.post(`${ruta}/workorder_destroy/${id}`, {});
-        getAllReleases();
-    }
-    /*
+
     useEffect(() => {
         fetchWorkOrders();
     }, []);
 
     const fetchWorkOrders = async () => {
         try {
-            const response = await axios.get('/api/workorders');
-            setWorkOrders(response.data);
+          const response = await axios.get('/api/workorders');
+          setWorkOrders(response.data);
         } catch (error) {
             console.error('Error fetching work orders:', error);
         }
@@ -65,10 +54,22 @@ const Release = () => {
         } catch (error) {
             console.error('Error updating work order:', error);
         }
-    };
-*/
+      };
 
-    
+      
+    const filteredReleases = releases.filter((release) => {
+        if (searchTerm === "") {
+            return release;
+        } else if (
+            release.maintenanceType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            release.serviceType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            release.employeeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            release.jobDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            release.status.toLowerCase().includes(searchTerm.toLowerCase())
+        ) {
+            return release;
+        }
+    });
 
     return (
         <>
@@ -135,21 +136,11 @@ const Release = () => {
                             <td> <img src={release.evidence2} alt="signature" width={100} height={100} /> </td>
                             <td> <img src={release.evidence3} alt="signature" width={100} height={100} /> </td>
                             <td> {release.status} </td>
-                            <td>
-                                {/*<Link
-                                    to={`http://localhost/ITABackEnd/public/approved`}
-                                    className="btn btn-warning"
-                                >
-                                    Aprobar
-                                </Link>*/}
-                                
-                                <Button as={Link} to='http://localhost/ITAFrontEndWeb/public/approveOrder' >
-                                    Aprobar
-                                </Button>
+                            <td> <button  onClick={() => handleApproval(workOrder.id)}>
 
-
-                                <Button
-                                    onClick={() => deleteRelease(release.id)}
+                            </button>
+                                <button
+                                    onClick={() => deleteApproveds(release.id)}
                                     className="btn btn-danger"
                                 >
                                     Eliminar
@@ -161,6 +152,7 @@ const Release = () => {
             </Table>
         </>
     );
+}
 };
 
 export default Release;

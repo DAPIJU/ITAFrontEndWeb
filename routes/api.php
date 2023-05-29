@@ -40,14 +40,45 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/showToken',[PersonalDataController::class,'showToken']);
 Route::post('/login', [UserController::class, 'login']);
-Route::post('/personalData_registerPersonalUser',[PersonalDataController::class, 'registerPersonalUser']);
 Route::post('/user_register',[UserController::class, 'register']);
+//Route::middleware('auth:api') ->group(function (){
 
-Route::post('/maintenance_store',[MaintenanceRequestController::class, 'store']);
+    Route::post('/personalData_store',[PersonalDataController::class, 'store']);
+    Route::post('/personalData_update/{id}',[PersonalDataController::class,'update']);
+    Route::delete('/personalData_destroy/{id}',[PersonalDataController::class, 'destroy']);
+    Route::get('/personalData_show/{id}',[PersonalDataController::class, 'show']);
+    Route::get('/personalData_index',[PersonalDataController::class, 'index']);
+    Route::post('/personalData_registerPersonalUser',[PersonalDataController::class, 'registerPersonalUser']);
+    Route::post('/personalData_updateProfile/{id}',[PersonalDataController::class,'updateProfile']);
 
-Route::middleware('auth:api') ->group(function(){
+    
+    Route::get('/user_show/{id}',[UserController::class, 'show']);
+    Route::post('/user_update/{id}',[UserController::class,'update']);
+    Route::delete('/user_destroy/{id}',[UserController::class, 'destroy']);
+    Route::get('/user_index',[UserController::class, 'index']);
 
-//PERSONAL DATA
+    Route::get('/maintenance_index',[MaintenanceRequestController::class, 'index']);
+    Route::post('/maintenance_store',[MaintenanceRequestController::class, 'store']);
+    Route::get('/maintenance_show/{id}',[MaintenanceRequestController::class, 'show']);
+    Route::post('/maintenance_update/{id}',[MaintenanceRequestController::class,'update']);
+    Route::delete('/maintenance_destroy/{id}',[MaintenanceRequestController::class, 'destroy']);
+    Route::get('/maintenance_showEarring',[MaintenanceRequestController::class, 'showEarring']);
+    Route::get('/maintenance_showActiveRequest',[MaintenanceRequestController::class, 'showActiveRequest']);
+
+    Route::get('/workorder_index',[WorkOrderController::class, 'index']);
+    Route::post('/workorder_store',[WorkOrderController::class, 'store']);
+    Route::get('/workorder_show/{id}',[WorkOrderController::class, 'show']);
+    Route::post('/workorder_update/{id}',[WorkOrderController::class,'update']);
+    Route::delete('/workorder_destroy/{id}',[WorkOrderController::class, 'destroy']);
+    Route::get('/workorder_showApproved',[WorkOrderController::class, 'showApproved']);
+    Route::get('/workorder_showRequestHistory',[WorkOrderController::class, 'showRequestHistory']);
+    Route::get('/workorder_showRelease',[WorkOrderController::class, 'showRelease']);
+
+//});
+
+
+
+/*PERSONAL DATA
 Route::post('/personalData_store',[PersonalDataController::class, 'store']);
 Route::post('/personalData_update/{id}',[PersonalDataController::class,'update']);
 Route::delete('/personalData_destroy/{id}',[PersonalDataController::class, 'destroy']);

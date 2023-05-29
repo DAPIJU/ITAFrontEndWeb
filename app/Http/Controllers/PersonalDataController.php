@@ -9,6 +9,12 @@ use App\Models\User;
 
 class PersonalDataController extends Controller
 {
+    /*
+    protected $redirectTo='/';
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }*/
     /**
      * Display a listing of the resource.
      *

@@ -13,8 +13,7 @@ import { useEffect } from 'react';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Badge from 'react-bootstrap/Badge';
 import { useParams } from 'react-router-dom';
-import { Link } from "react-router-dom";
-import swal from "sweetalert";
+
 
 const theme = {
   bg: {
@@ -100,83 +99,24 @@ const card = {
 };
 
 function NewOrder() {
+  const [employeeName, setEmployeeName] = useState('');
+  const [maintenanceType, setMaintenanceType] = useState('');
+  const [serviceType, setServiceType] = useState('');
+  const [maintenanceDate, setMaintenanceDate] = useState('');
 
-
-  const [maintenanceType, setMaintenanceType] = useState('Interno'); //Interno se mantiene constante para el tipo de mantenimiento, se muestra y guarda
-  const [serviceType, setServiceType] = useState(''); //Para mostrar y guardar el tipo de servicio
-  const [maintenanceDate, setMaintenanceDate] = useState(''); //Para mostrar y guardar la fecha de mantenimiento asignada
-
-  const [maintenancePersons, setMaintenancePersons] = useState([]); //Mostrar los nombres de los empleados de mantenimiento desde el select
-  const [employeeID, setEmployeeID] = useState(''); //Para guardar el nombre del empleado de mantenimiento
-
-  const [name, setName] = useState(''); //Para mostrar el nombre del solicitante
-  const [lastname, setLastName] = useState(''); //Para mostrar los apelldios del solicitante
-  const [area, setArea] = useState(''); //Para mostrar el área del solicitante
-  const [role, setRole] = useState(''); //Para mostrar el rol del solicitante
-  const [signature, setSignature] = useState(''); //Para mostrar la firma del solicitante
-
-  const [department, setDepartment] = useState(''); //Para mostrar el departemento de la solicitud 
-  const [requestDescription, setRequestDescription] = useState(''); // Para mostrar la descripción de la solicitud
-  const [status, setStatus] = useState(''); //Para mostrar el estado de la solicitud
-  const [ID, setID] = useState(0); //Para mostrar el ID de la solicitud
-  const [requestDate, setRequestDate] = useState(''); //Para mostrar la fecha de la solcitud
+  const [name, setName] = useState('');
+  const [signature, setSignature] = useState('');
+  const [department, setDepartment] = useState('');
+  const [requestDescription, setRequestDescription] = useState('');
+  const [status, setStatus] = useState('');
+  const [ID, setID] = useState('');
 
 
   const { id } = useParams();
 
   const getData = async () => {
-    const response = await axios.get(`/ITAFrontEndWeb/public/api/maintenance_show/${id}`, //Obtener datos de la solicitud
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('user-info')}`
-        }
-      })
-    const response2 = await axios.get('/ITAFrontEndWeb/public/api/personalData_show/' + response.data.personaldata_id, //Obtener datos personales
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('user-info')}`
-        }
-      })
-
-    const response3 = await axios.get('/ITAFrontEndWeb/public/api/user_show/' + response.data.personaldata_id, //Obtener datos del usuario
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('user-info')}`
-        }
-      })
-
-    const response4 = await axios.get('/ITAFrontEndWeb/public/api/personalData_showMaintenancePerson/', //Obtener datos de personas de mantenimiento
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('user-info')}`
-        }
-      })
-
-    console.log(response, response2, response3, response4)
-    setID(response.data.id) //ID - solicitud de mantenimiento
-    setDepartment(response.data.department) //Departamento - solicitud de mantenimiento
-    setRequestDescription(response.data.requestDescription) // Descripción de la solicitud - solicitud de mantenimiento
-    setStatus(response.data.status) //Estado - solicitud de mantenimiento
-    setRequestDate(response.data.requestDate) //Fecha de solicitud - solicitud de mantenimiento
-
-    setName(response2.data.name) //Nombre - solicitante
-    setLastName(response2.data.lastname) //Apellidos - solicitante
-    setArea(response2.data.area) //Área - solicitante
-    setSignature(response2.data.signature) //Firma - solicitante
-
-    setRole(response3.data.role)// Rol - solicitante
-
-    setMaintenancePersons(response4.data) //Nombre - info personal
-
-
+    const response = await axios.get(`/ITAFrontEndWeb/public/api/maintenance_show/${id}`)
+    const response2 = await axios.get('/ITAFrontEndWeb/public/api/personalData_show/' + response.data.personaldata_id)
 
   }
 
@@ -187,14 +127,17 @@ function NewOrder() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post('http://localhost/ITAFrontEndWeb/public/api/workorder_newOrder', { //Para guardar los datos de la nueva orden
-      maintenancerequest_id: ID, personaldata_id: employeeID,
-      maintenanceType: maintenanceType, serviceType: serviceType, maintenanceDate: maintenanceDate
-    }, {
-      headers: {
+    const formData = new FormData();
 
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('user-info')}`
+    formData.append('employeeName', employeeName)
+    formData.append('maintenanceType', maintenanceType)
+    formData.append('serviceType', serviceType)
+    formData.append('maintenanceDate', maintenanceDate)
+
+
+    axios.post('http://localhost/ITAFrontEndWeb/public/api/personalData_store', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', 'Accept': 'application/json'
       }
     })
       .then((response) => {
@@ -267,7 +210,7 @@ function NewOrder() {
           <Form.Group className='row mb-3'>
             <Form.Label className='col-4'>Tipo de mantenimiento</Form.Label>
             <Col>
-              <Form.Control className='col-8' value={"Interno"} type='text' placeholder='Rol' disabled readOnly />
+              <Form.Control className='col-8' value={"Interno"} type='text' placeholder='Rol' onChange={(e) => setMaintenanceType(e.target.value)} disabled readOnly />
             </Col>
 
             <Form.Label className='col'>Tipo de servicio</Form.Label>
@@ -331,7 +274,7 @@ function NewOrder() {
                 <label>ID de la solicitud</label>
               </Col>
               <Col sm>
-                <Form.Control style={{ width: '100%' }} value={ID} type='text' placeholder='ID' disabled />
+                <Form.Control style={{ width: '100%' }} value={ID} type='text' placeholder='Rol' disabled readOnly />
               </Col>
               <Col sm>
                 <label >Fecha de solicitud</label>
@@ -375,10 +318,10 @@ function NewOrder() {
 
             <Form.Group className="row">
               <Col>
-                <Link className="btn btn-danger" to={'http://localhost/ITAFrontEndWeb/public/activeRequest'}>Regresar</Link>
+              <Button className="btn btn-danger">Cancelar</Button>
               </Col>
               <Col>
-                <Button type="submit" className="btn btn-submit">Aceptar</Button>
+                <Button type='submit' onSubmit={handleSubmit}>Aceptar</Button>
               </Col>
             </Form.Group>
 

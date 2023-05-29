@@ -10,6 +10,7 @@ import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
+import swal from "sweetalert";
 
 const Earring = () => {
     function testClickEvent(param) {
@@ -18,21 +19,13 @@ const Earring = () => {
 
     const [searchTerm, setSearchTerm] = useState("");
     const [earrings, setEarrings] = useState([]);
-    const ruta = "http://localhost/ITAFrontEndWeb/public/api";
 
     useEffect(() => {
         getAllEarrings();
     }, [])
 
     const getAllEarrings = async () => {
-        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/workorder_showEarring',
-        {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'Accept': 'application/json',
-              'Authorization':`Bearer ${localStorage.getItem('user-info')}`
-            }
-          });
+        const response = await axios.get('http://localhost/ITAFrontEndWeb/public/api/maintenance_showEarring');
         setEarrings(response.data);
         console.log(response.data);
     }
@@ -54,14 +47,6 @@ const Earring = () => {
             return earring;
         }
     });
-
-    //const for the table
-    const handleClick = (id) => {
-        const confirmar = window.confirm(`¿Deseas crear una orden de solicitud con el ID: ${id}?`);
-    if (confirmar) {
-      history.push(`http://localhost/ITAFrontEndWeb/public/newOrder/${id}`);
-    }
-      };
 
 
     return (

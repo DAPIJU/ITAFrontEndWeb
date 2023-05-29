@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Validator; //Import the validator class
 
 class WorkOrderController extends Controller
 {
+    /*
+    protected $redirectTo='/';
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }*/
     /**
      * Display a listing of the resource.
      *
@@ -402,43 +408,5 @@ class WorkOrderController extends Controller
             'maintenancerequests.evidence3', 
             'maintenancerequests.status'
     ]);
-        return $workorder;
-    }
-
-    public function newOrder(Request $request){
-
-        $rules = [
-            'maintenanceType' => 'required|in:Interno',
-            'serviceType' => 'in:Eléctrico,Plomería,Herrería,Pintura,Obra Civil,Otro',
-            'personaldata_id' => 'required|exists:personaldatas,id',
-            'maintenanceDate' => 'nullable|date',
-            'maintenancerequest_id' => 'required|exists:maintenancerequests,id',
-        ];
-
-        $messages = [
-            'required' => 'El :attribute es OBLIGATORIO.',
-            'in' => 'El :attribute no pertenece a las categorías permitidas',
-            'string' => 'El :attribute debe ser una cadena de caracteres.',
-            'min' => 'El :attribute debe de tener más de :min caracteres',
-            'date' => 'El :attribute debe ser una fecha válida.',
-            'max' => 'El archivo :attribute no debe exceder los :max caracteres',
-            'exists' => 'El folio de la solictud no existe en el Sistema'
-        ];
-    
-        $validator = Validator::make($request->all(), $rules, $messages);
-    
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-
-        $workorder = new WorkOrder;
-        $workorder->maintenanceType=$request->maintenanceType;
-        $workorder->serviceType=$request->serviceType;
-        $workorder->personaldata_id=$request->personaldata_id;
-        $workorder->maintenanceDate=$request->maintenanceDate;
-        $workorder->maintenancerequest_id=$request->maintenancerequest_id;
-        $workorder->save();
-
-    }
-
+}
 }
