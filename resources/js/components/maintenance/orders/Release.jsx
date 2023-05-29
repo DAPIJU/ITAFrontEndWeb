@@ -139,7 +139,7 @@ const Release = () => {
                             <td> <button  onClick={() => handleApproval(workOrder.id)}>
 
                             </button>
-                                <button
+                                <Button
                                     onClick={() => deleteApproveds(release.id)}
                                     className="btn btn-danger"
                                 >
@@ -153,6 +153,5 @@ const Release = () => {
         </>
     );
 }
-};
 
 export default Release;
